@@ -1,13 +1,16 @@
-<h2>New Item</h2>
+<h2>New Discount</h2>
+
 <%= form_tag "/merchant/discounts" do %>
   <%= label_tag :item %>
-  <%= select_tag :item, options_for_select(@items) %>
+  <%= select_tag :item_id, options_from_collection_for_select(@items, :id, :name) %>
 
   <%= label_tag :percentage %>
   <%= text_field_tag :percentage %>
 
   <%= label_tag :number_needed %>
   <%= text_field_tag :number_needed %>
+
+  <%= hidden_field_tag 'merchant_id', current_user.merchant.id %>
 
   <%= submit_tag 'Create Discount' %>
 <% end %>

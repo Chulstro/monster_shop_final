@@ -15,4 +15,15 @@
   <% end %>
 </section>
 
-<%= link_to "Create Discount", "/merchant/discounts" %>
+<section class='discounts'>
+Current Promotions:
+  <% @merchant.discounts.each do |discount| %>
+  <section>
+    <p><%= discount.item.name %></p>
+    <p>Percentage Off: <%= discount.percentage %>%</p>
+    <p>Price when buying <%= discount.number_needed %> or more </p>
+  </section>
+  <% end %>
+</section>
+
+<%= link_to "Add Discounts", "/merchant/discounts" %>
