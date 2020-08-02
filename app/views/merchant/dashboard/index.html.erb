@@ -19,7 +19,7 @@
 Current Promotions:
   <% @merchant.discounts.each do |discount| %>
   <section>
-    <p><%= discount.item.name %></p>
+    <p><%= link_to discount.item.name, "/merchant/discounts/#{discount.id}" %></p>
     <p>Percentage Off: <%= discount.percentage %>%</p>
     <p>Price when buying <%= discount.number_needed %> or more </p>
   </section>
