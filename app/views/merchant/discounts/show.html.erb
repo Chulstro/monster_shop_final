@@ -2,3 +2,6 @@
 
 <p>Percentage off: <%= @discount.percentage %></p>
 <p>Bulk Needed: <%= @discount.number_needed %></p>
+
+<%= link_to "Edit Discount", "/merchant/discounts/#{@discount.id}/edit" %>
+<%= link_to "Delete Discount", "/merchant/discounts/#{@discount.id}", method: :delete %>

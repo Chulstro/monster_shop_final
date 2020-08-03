@@ -46,4 +46,38 @@ RSpec.describe "When implementing a discount" do
     expect(page).to have_content("Bulk Needed: 50")
     expect(page).to have_content("#{@ogre.name}")
   end
+
+  it "can be edited from its show page" do
+    visit "/merchant/discounts/#{@discount_1.id}"
+
+    click_on "Edit Discount"
+
+    expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
+
+    expect(page).to have_field(:percentage)
+    expect(page).to have_field(:number_needed)
+
+    fill_in :percentage, with: 15
+    fill_in :number_needed, with: ""
+
+    click_on "Update Discount"
+    expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
+    expect(page).to have_content("You must fill out all fields")
+
+    fill_in :percentage, with: 15
+    fill_in :number_needed, with: 55
+
+    click_on "Update Discount"
+    expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}")
+    expect(page).to have_content("Discount successfully updated")
+  end
+
+  it "can be deleted from it's show page" do
+    visit "/merchant/discounts/#{@discount_1.id}"
+
+    click_on "Delete Discount"
+
+    expect(current_path).to eq("/merchant")
+    expect(page).to_not have_content("Ogre")
+  end
 end
