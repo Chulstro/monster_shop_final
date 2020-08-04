@@ -4,7 +4,7 @@ RSpec.describe "When implementing a discount" do
   before :each do
     @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
     @user = User.create(name: "John", address: "145 Lowkey ln", city: "Philadelphia", state: "Pennsylvania", zip: 89769, role: 1, merchant: @megan)
-    @user_1 = User.create(name: "Jen", address: "987 Lordling dr", city: "Portland", state: "Oregon", zip: 89762)
+    @user_1 = User.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
     @brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
     @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 50 )
@@ -103,5 +103,33 @@ RSpec.describe "When implementing a discount" do
       expect(page).to have_content("Quantity: 5")
       expect(page).to have_content("Subtotal: $70.00")
     end
+  end
+
+  it "adds the correct info to orders in creation" do
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
+
+    visit "/items"
+    click_on "Ogre"
+    click_on "Add to Cart"
+    visit "/items"
+    click_on "Hippo"
+    click_on "Add to Cart"
+    click_on "Cart: 2"
+
+    within "#item-#{@ogre.id}" do
+      click_on "More of This!"
+      click_on "More of This!"
+      click_on "More of This!"
+      click_on "More of This!"
+    end
+    click_on "Check Out"
+    order = Order.first
+
+    expect(current_path).to eq("/profile/orders")
+    click_on "#{order.id}"
+
+    expect(current_path).to eq("/profile/orders/#{order.id}")
+    expect(page).to have_content("Discount Applied: 30%")
+
   end
 end

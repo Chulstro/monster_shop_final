@@ -10,6 +10,9 @@
 <% @order.order_items.each do |order_item| %>
   <section id='order-item-<%= order_item.id %>'>
     <h3><%= link_to order_item.item.name, item_path(order_item.item) %></h3>
+    <% if !order_item.item.applicable_discount?(order_item.quantity) %>
+      <h4>Discount Applied: <%= order_item.item.discount_percentage(order_item.quantity) %></h4>
+    <% end %>
     <p><%= order_item.item.description %></p>
     <p>Quantity: <%= order_item.quantity %></p>
     <p>Price: <%= number_to_currency(order_item.price) %></p>
