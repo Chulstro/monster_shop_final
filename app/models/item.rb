@@ -30,4 +30,13 @@ class Item < ApplicationRecord
   def average_rating
     reviews.average(:rating)
   end
+
+  def applicable_discount?(number)
+    app_discounts = discounts.where("number_needed <= #{number}")
+    app_discounts.empty?
+  end
+
+  def applicable_discount(number)
+    discounts.where("number_needed <= #{number}").order('discounts.percentage DESC').first
+  end
 end

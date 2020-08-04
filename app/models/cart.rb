@@ -40,6 +40,11 @@ class Cart
     @contents[item_id.to_s] * Item.find(item_id).price
   end
 
+  def discount_subtotal_of(item_id)
+    item = Item.find(item_id)
+    subtotal_of(item_id) * (100 - item.applicable_discount(count_of(item_id)).percentage) / 100.to_f
+  end
+
   def limit_reached?(item_id)
     count_of(item_id) == Item.find(item_id).inventory
   end
