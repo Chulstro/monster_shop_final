@@ -53,6 +53,8 @@ RSpec.describe Item do
       @review_3 = @ogre.reviews.create(title: 'EW', description: 'This Ogre is Ew', rating: 1)
       @review_4 = @ogre.reviews.create(title: 'So So', description: 'This Ogre is So so', rating: 2)
       @review_5 = @ogre.reviews.create(title: 'Okay', description: 'This Ogre is Okay', rating: 4)
+      @discount_1 = @ogre.discounts.create(percentage: 20, number_needed: 5, merchant: @ogre.merchant)
+      @discount_2 = @ogre.discounts.create(percentage: 30, number_needed: 6, merchant: @ogre.merchant)
       @user = User.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
       @order_1 = @user.orders.create!
       @order_2 = @user.orders.create!
@@ -72,6 +74,26 @@ RSpec.describe Item do
       expect(Item.by_popularity).to eq([@hippo, @nessie, @ogre, @gator, @giant])
       expect(Item.by_popularity(3, "ASC")).to eq([@giant, @gator, @ogre])
       expect(Item.by_popularity(3, "DESC")).to eq([@hippo, @nessie, @ogre])
+    end
+
+    it ".applicable_discount?()" do
+      expect(@ogre.applicable_discount?(6)).to eq(true)
+      expect(@ogre.applicable_discount?(4)).to eq(false)
+    end
+
+    it ".applicable_discount()" do
+      expect(@ogre.applicable_discount(5)).to eq(@discount_1)
+      expect(@ogre.applicable_discount(6)).to eq(@discount_2)
+    end
+
+    it ".applicable_price()" do
+      expect(@ogre.applicable_price(5)).to eq(16.0)
+      expect(@ogre.applicable_price(4)).to eq(20.0)
+    end
+
+    it ".discount_percentage()" do
+      expect(@ogre.discount_percentage(5)).to eq(20)
+      expect(@ogre.discount_percentage(6)).to eq(30)
     end
   end
 end

@@ -33,7 +33,7 @@ class Item < ApplicationRecord
 
   def applicable_discount?(number)
     app_discounts = discounts.where("number_needed <= #{number}")
-    app_discounts.empty?
+    !app_discounts.empty?
   end
 
   def applicable_discount(number)
@@ -41,7 +41,7 @@ class Item < ApplicationRecord
   end
 
   def applicable_price(count)
-    if !applicable_discount?(count)
+    if applicable_discount?(count)
       price * (100 - (applicable_discount(count).percentage)) / 100.to_f
     else
       price
@@ -50,7 +50,7 @@ class Item < ApplicationRecord
   end
 
   def discount_percentage(quantity)
-    number_to_percentage(applicable_discount(quantity).percentage, strip_insignificant_zeros: true)
+    applicable_discount(quantity).percentage
   end
 
 end
