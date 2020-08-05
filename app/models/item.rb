@@ -46,7 +46,6 @@ class Item < ApplicationRecord
     else
       price
     end
-
   end
 
   def discount_percentage(quantity)
