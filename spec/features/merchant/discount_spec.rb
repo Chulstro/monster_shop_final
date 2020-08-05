@@ -132,4 +132,22 @@ RSpec.describe "When implementing a discount" do
     expect(page).to have_content("Discount Applied: 30%")
 
   end
+
+  it "can't create a discount with wrong params" do
+    visit '/merchant/discounts'
+    select "Ogre"
+
+    fill_in :percentage, with: ""
+    fill_in :number_needed, with: ""
+
+    click_on "Create Discount"
+    expect(current_path).to eq('/merchant/discounts')
+    expect(page).to have_content("Must fill in all fields")
+
+    fill_in :percentage, with: 101
+    fill_in :number_needed, with: 1
+    click_on "Create Discount"
+    expect(current_path).to eq('/merchant/discounts')
+    expect(page).to have_content("Must fill in all fields")
+  end
 end

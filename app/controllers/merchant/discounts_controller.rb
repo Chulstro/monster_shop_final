@@ -5,8 +5,13 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def create
-    Discount.create(discount_params)
-    redirect_to "/merchant"
+    discount = Discount.create(discount_params)
+    if discount.save
+      redirect_to "/merchant"
+    else
+      flash[:error] = "Must fill in all fields"
+      redirect_to "/merchant/discounts"
+    end
   end
 
   def show
