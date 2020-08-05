@@ -9,7 +9,7 @@ class Merchant::DiscountsController < Merchant::BaseController
     if discount.save
       redirect_to "/merchant"
     else
-      flash[:error] = "Must fill in all fields"
+      flash[:error] = discount.errors.full_messages.to_sentence
       redirect_to "/merchant/discounts"
     end
   end
@@ -28,7 +28,7 @@ class Merchant::DiscountsController < Merchant::BaseController
       flash[:success] = "Discount successfully updated"
       redirect_to "/merchant/discounts/#{@discount.id}"
     else
-      flash[:error] = "You must fill out all fields"
+      flash[:error] = @discount.errors.full_messages.to_sentence
       redirect_to "/merchant/discounts/#{@discount.id}/edit"
     end
   end

@@ -29,7 +29,14 @@ RSpec.describe "When editing a discount" do
 
     click_on "Update Discount"
     expect(current_path).to eq("/merchant/discounts/#{@discount_1.id}/edit")
-    expect(page).to have_content("You must fill out all fields")
+    expect(page).to have_content("Number needed can't be blank")
+
+    fill_in :percentage, with: 101
+    fill_in :number_needed, with: -1
+
+    click_on "Update Discount"
+    expect(page).to have_content("Number needed must be greater than 0")
+    expect(page).to have_content("Percentage is not included in the list")
 
     fill_in :percentage, with: 15
     fill_in :number_needed, with: 55

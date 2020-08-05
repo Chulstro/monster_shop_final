@@ -47,12 +47,13 @@ RSpec.describe "When implementing a discount" do
 
     click_on "Create Discount"
     expect(current_path).to eq('/merchant/discounts')
-    expect(page).to have_content("Must fill in all fields")
+    expect(page).to have_content("Percentage can't be blank")
+    expect(page).to have_content("Number needed can't be blank")
 
     fill_in :percentage, with: 101
     fill_in :number_needed, with: 1
     click_on "Create Discount"
     expect(current_path).to eq('/merchant/discounts')
-    expect(page).to have_content("Must fill in all fields")
+    expect(page).to have_content("Percentage is not included in the list")
   end
 end
